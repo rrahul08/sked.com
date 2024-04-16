@@ -5,7 +5,7 @@ import { useNavigate,Link } from 'react-router-dom'
 const Login = () => {
   const [email,setEmail] = useState();
   const [password,setPassword] = useState();
-  const history = useNavigate();
+  const navigate = useNavigate();
   
   const handleUserName = (e) => {
      setEmail(e.target.value);
@@ -16,33 +16,24 @@ const Login = () => {
      setPassword(e.target.value);
   }
 
+  const handleSubmit = (e) => {
 
-
-  async function submit(e){
     e.preventDefault();
+    axios.post('http://localhost:3001/login',{email,password})
+    .then(result => {
+      console.log(result)
+      if(result.data === "Success"){
+        navigate('/eventtypes')
+      }
+      
+ })
+    .catch(err => console.log(err))
 
-    try{
+ }
 
-        await axios.post("http://localhost:8000/login",{
-            email,password
-        })
-        .then(res => {
-          if(res.data == "exist"){
-            history('/eventtypes',{state:{id:email}})
-          }
-          else if(res.data == "notexist"){
-            alert("User not signed up")
-          }
-        })
-        .catch(e => {
-          alert("wrong details");
-          console.log(e);
-        })
-    }
-    catch(e){
-        console.log(e);
-    }
-  }
+
+
+  
 
 
   return (
@@ -52,12 +43,12 @@ const Login = () => {
         <h1 className='text-4xl'>Welcome back</h1>
       </div>
       <div class="w-[500px]  ml-[420px] mt-10">
-          <form class="bg-white h-[400px] shadow-md rounded-md px-8 pt-6 pb-8 mb-4">
+          <form action="POST" class="bg-white h-[400px] shadow-md rounded-md px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 mt-2" for="email">
                 Email address
               </label>
-              <input class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="abc@example.com"/>
+              <input class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="abc@example.com" onChange={handleUserName}/>
             </div>
             <div class="mb-6">
               <label class="block text-gray-700 text-sm font-bold mb-2 mt-7" for="password">
@@ -66,11 +57,11 @@ const Login = () => {
                   <div>Forgot?</div>
                 </div>
               </label>
-              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="•••••••••••••"/>
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="•••••••••••••" onChange={handlePassword}/>
               
             </div>
             <div class="flex items-center justify-between">
-              <button class="bg-black text-white items-center p-2  border rounded-md w-full" type="button" onClick={submit}>
+              <button class="bg-black text-white items-center p-2  border rounded-md w-full" type="button" onClick={handleSubmit}>
                 Sign In
               </button>
             </div>

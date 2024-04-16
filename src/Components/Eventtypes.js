@@ -1,8 +1,14 @@
 import React from 'react'
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const Eventtypes = () => {
+
+  const location=useLocation()
+
   return (
-    <div>Eventtypes</div>
+    <div>
+      <h1>Eventtypes</h1>
+    </div>
   )
 }
 
